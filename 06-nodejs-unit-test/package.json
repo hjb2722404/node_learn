@@ -1,0 +1,14 @@
+{
+  "name": "nodeunit",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "nodeunit": "0.7.4"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.3"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha  ./test/test.js"
+  }
+}

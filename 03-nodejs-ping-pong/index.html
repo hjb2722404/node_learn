@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <title>PING-PONG</title>
+</head>
+<body>
+    <h1>PING-PONG</h1>
+    <button id="ping">Send PING to Server</button>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://127.0.0.1:3000');
+        socket.on('ping',function(data){
+            console.log('Received PING,Sending PONG...');
+            socket.emit('pong',{text:'PONG'});
+        });
+
+        socket.on('pong',function(data){
+            console.log('Received PONG response PONG!');
+            socket.emit('pong',{text:'PONG'});
+        });
+
+        $('#ping').click(function(){
+            console.log('Sending PING to server..');
+            socket.emit('ping',{text:'PING'});
+        });
+
+    </script>
+</body>
+</html>

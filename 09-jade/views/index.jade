@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  mixin users(myusers)
+    ul
+     each user in myusers
+        li= user
+
+  -users =['aaa','bbb','ccc']
+  mixin users(users)
+  -more_users = ['AAA','BBB','CCC']
+  mixin users(more_users)

@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  -var name = "HJB"
+  h1= title
+  p Welcome to #{title}
+  h1 Hello #{name}!
+  -users = ['AAA','BBB','CCC','DDD']
+  -each user in users
+    p=user
+
+  h1 使用for循环：
+  -for user in users
+    p=user
+
+  h1 对对象进行迭代：
+  -obj = { first_name:'George',surname:'Ornbo'}
+  -each val, key in obj
+    li #{key}:#{val}
+
+  -awake = false
+  -if(awake)
+    p 你醒了，来杯咖啡
+  -else
+    p 你怎么还在睡
+  h1 jade include例子
+  include includes/footer

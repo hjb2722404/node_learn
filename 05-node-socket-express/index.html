@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <title>socket_express example</title>
+    <style>
+        #send-message { display: none;}
+        #nicknames { width: 300px; float: right}
+        #message { width: 300px; height: 100px;}
+        #messages p strong {margin-right: 5px;}
+    </style>
+</head>
+<body>
+<h1>socket_express example</h1>
+
+<form id="set-nickname" action="">
+    <label for="nickname">Nickname:</label>
+    <input id="nickname" type="text"/>
+    <input type="submit"/>
+</form>
+<form id="send-message" action="#">
+    <textarea name="message" id="message" cols="30" rows="10"></textarea>
+    <input type="submit"/>
+</form>
+<div id="nicknames">
+    <ul>
+
+    </ul>
+</div>
+
+<div id="messages">
+</div>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://127.0.0.1:3000');
+    jQuery(function ($) {
+        var nickname= $('#nickname');
+        var setNicknameForm = $('#set-nickname');
+        var message = $('#message');
+        var messageForm = $('#send-message');
+        var messages = $('#messages');
+        var nicknamesList = $('#nicknames ul');
+
+        setNicknameForm.submit(function(event){
+            event.preventDefault();
+            socket.emit('nickname',nickname.val(),function(data){
+                if(data){
+                    console.log('Nickname set successfully');
+                    setNicknameForm.hide();
+                    messageForm.show();
+                }else{
+                    setNicknameForm.prepend('<p>Sorry-that nickname is already taken</p>');
+                }
+            });
+        });
+        messageForm.submit(function(event){
+            event.preventDefault();
+            socket.emit('user message',message.val())
+            message.val('').focus();
+        });
+
+        socket.on('nicknames',function(data){
+            console.log('haha');
+            var html ='';
+            for(var i=0; i<data.length; i++){
+                html += '<li>'+data[i]+'</li>'
+            }
+            nicknamesList.empty().append(html);
+        });
+
+        socket.on('user message',function(data){
+            messages.append('<p><strong>'+data.nick+'</strong>:'+data.message+'</p>');
+        });
+
+        socket.on('welcome',function(data){
+            console.log(data.text);
+        });
+    });
+
+</script>
+</body>
+</html>
